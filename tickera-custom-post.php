@@ -37,8 +37,8 @@ $pageUrl = home_url( $wp->request );
 $addEvent = $pageUrl.'/?actionEvent='.base64_encode('addEvent');
 
 
-if($user_role == 'editor'){	
-
+//if($user_role == 'editor'){	
+if(current_user_can('publish_posts')){
 
 if(isset($_REQUEST['actionEvent'])){
 	
@@ -58,6 +58,9 @@ if(isset($_POST['event_submit'])){
 	$tc_term_editor = $_POST['tc_term_editor'];
 	$show_ticket = $_POST['show_ticket'];
 	$hide_event = $_POST['hide_event'];
+	$event_logo = $_POST['event_logo'];
+	$sponsors_logo = $_POST['sponsors_logo'];
+	$featured_image_logo = $_POST['featured_image_event_id'];
 	
 	$event_cat = $_POST['mychecky'];
 	
@@ -84,21 +87,13 @@ if(isset($_POST['event_submit'])){
 	update_post_meta($post_id, 'event_terms', $tc_term_editor );
 	update_post_meta($post_id, 'hide_event_after_expiration', $hide_event );
 	update_post_meta($post_id, 'show_tickets_automatically', $show_ticket );
+	update_post_meta($post_id, 'event_logo_file_url', $event_logo );
+	update_post_meta($post_id, 'sponsors_logo_file_url', $sponsors_logo );
+	update_post_meta($post_id, '_thumbnail_id', $featured_image_logo );
 
 	
 			
-	if ($_FILES['event_logo']) {
-		
-		image_uploading($_FILES['event_logo'], 'event_logo_file_url', $post_id);
-	}
-	if ($_FILES['sponsors_logo']) {
-		
-		image_uploading($_FILES['sponsors_logo'], 'sponsors_logo_file_url', $post_id);
-	}
-	if ($_FILES['featured_image_event']) {
-		
-		image_uploading($_FILES['featured_image_event'], '_thumbnail_id', $post_id, 'featured_image_event');
-	}
+
 	
 
 echo '<script>window.location.href = "'.$pageUrl.'/?actionEvent='.base64_encode($post_id).'";</script>';
@@ -107,7 +102,7 @@ echo '<script>window.location.href = "'.$pageUrl.'/?actionEvent='.base64_encode(
 // Update Query
 
 if(isset($_POST['event_update_submit'])){
-	
+
 	$post_id = $_POST['update_id'];
 	$event_title = $_POST['event_title'];
 	$event_start = $_POST['event_start'];
@@ -119,6 +114,9 @@ if(isset($_POST['event_update_submit'])){
 	$tc_term_editor = $_POST['tc_term_editor'];
 	$show_ticket = $_POST['show_ticket'];
 	$hide_event = $_POST['hide_event'];
+	$event_logo = $_POST['event_logo'];
+	$sponsors_logo = $_POST['sponsors_logo'];
+	$featured_image_logo = $_POST['featured_image_event_id'];
 
 	$event_cat = $_POST['mychecky'];
 
@@ -151,20 +149,9 @@ wp_update_post( $my_post );
 	update_post_meta($post_id, 'event_terms', $tc_term_editor );
 	update_post_meta($post_id, 'hide_event_after_expiration', $hide_event );
 	update_post_meta($post_id, 'show_tickets_automatically', $show_ticket );
-	
-	if ($_FILES['event_logo']) {
-		
-		image_uploading($_FILES['event_logo'], 'event_logo_file_url', $post_id);
-	}
-	if ($_FILES['sponsors_logo']) {
-		
-		image_uploading($_FILES['sponsors_logo'], 'sponsors_logo_file_url', $post_id);
-	}
-	if ($_FILES['featured_image_event']) {
-		
-		image_uploading($_FILES['featured_image_event'], '_thumbnail_id', $post_id, 'featured_image_event');
-	}
-	
+	update_post_meta($post_id, 'event_logo_file_url', $event_logo );
+	update_post_meta($post_id, 'sponsors_logo_file_url', $sponsors_logo );
+	update_post_meta($post_id, '_thumbnail_id', $featured_image_logo );
 	
 }
 
@@ -227,7 +214,12 @@ $settings =   array(
 
 	$data = '<div><a  style="float:right;background: #222;padding: 8px;color: #fff;" href="'.$pageUrl.'">Back List</a></div><div><a  style="float:right;background: #222;padding: 8px;color: #fff;margin-right: 15px;" href="'.$addEvent.'">Create Event</a></div>';
 	
-	$data .= '<form class="form-inline" action="" method="post" enctype="multipart/form-data"><div class="form-group-tc"><input type="text" name="event_title" class="form-control-tc" id="event_title" placeholder="Event Title" value="'.$post_title.'" ></div><div class="form-group-tc"><div class="col-tc-6"><div class="col-tc-6"><input type="text" name="event_start" class="form-control-tc" id="event_start" placeholder="Event Start Date" value="'.$event_date.'" ></div><div class="col-tc-6" style="float:right;"><input type="text" name="event_start_time" class="form-control-tc" id="event_start_time" placeholder="Event Start Time" value="'.$event_date_time.'" ></div></div><div class="col-tc-6" style="float: right;"><div class="col-tc-6"><input type="text" name="event_end" class="form-control-tc" id="event_end" placeholder="Event Start End" value="'.$event_end.'"></div><div class="col-tc-6" style="float: right;"><input type="text" name="event_end_time" class="form-control-tc" id="event_end_time" placeholder="Event Start End" value="'.$event_end_time.'"></div></div><div class="clear-tc"></div></div><div class="form-group-tc"><input type="text" name="event_location" class="form-control-tc" id="event_location" placeholder="Event Location" value="'.$event_location.'" ></div><div class="form-group-tc"><div class="col-tc-4" style="border: 1px solid #bbb; padding: 8px 10px;"><label>Event Logo</label><input type="file" name="event_logo" class="form-control-tc" id="event_logo" value="'.$event_logo.'"> '.$event_logo_img.' </div><div class="col-tc-4" style="border: 1px solid #bbb; padding: 8px 10px;"><label>Sponsors Logo</label><input type="file" name="sponsors_logo" class="form-control-tc" id="sponsors_logo" value="'.$sponsors_logo.'"> '.$sponsors_logo_img.' </div><div class="col-tc-4" style="border: 1px solid #bbb; padding: 8px 10px; float: right;"><label>Featured Image</label><input type="file" name="featured_image_event" class="form-control-tc" id="featured_image_event" value="'.$featured_image.'" /> '.$featured_event_image.' </div></div><div class="form-group-tc content_editor"><p id="content_editor">Event Description</p>'.wp_editor( $content, $editor_id, $settings = array()).'</div><div class="form-group-tc"><p id="term_editor">Term of Use</p>'.wp_editor( $term_content, $term_editor_id, $settings = array()).'</div><div class="form-group-tc"><div class="col-tc-4"><input type="checkbox" '.$check_show_tickets.' name="show_ticket" class="form-checkbox-tc" id="show_ticket" value="1" >Show Tickets Automatically</div><div class="col-tc-4"><input type="checkbox" name="hide_event" class="form-checkbox-tc" id="hide_event" '.$check_hide_event.' value="1">Hide event after expiration</div><div class="col-tc-4"><input type="checkbox" name="event_draft" class="form-checkbox-tc" id="event_draft" '.$check_event_draft.' value="yes">Event Draft Mode</div></div><div class="form-group-tc"><h4>Event Categories</h4></div>';
+	$data .= '<div class="clear-tc"></div><form class="form-inline" style="margin-top:20px;" action="" method="post" enctype="multipart/form-data"><div class="form-group-tc"><input type="text" name="event_title" class="form-control-tc" id="event_title" placeholder="Event Title" value="'.$post_title.'" ></div><div class="form-group-tc"><div class="col-tc-6"><div class="col-tc-6"><input type="text" name="event_start" class="form-control-tc" id="event_start" placeholder="Event Start Date" value="'.$event_date.'" ></div><div class="col-tc-6" style="float:right;"><input type="text" name="event_start_time" class="form-control-tc" id="event_start_time" placeholder="Event Start Time" value="'.$event_date_time.'" ></div></div><div class="col-tc-6" style="float: right;"><div class="col-tc-6"><input type="text" name="event_end" class="form-control-tc" id="event_end" placeholder="Event Start End" value="'.$event_end.'"></div><div class="col-tc-6" style="float: right;"><input type="text" name="event_end_time" class="form-control-tc" id="event_end_time" placeholder="Event Start End" value="'.$event_end_time.'"></div></div><div class="clear-tc"></div></div><div class="form-group-tc"><input type="text" name="event_location" class="form-control-tc" id="event_location" placeholder="Event Location" value="'.$event_location.'" ></div>';
+	
+	$data .= '<div class="form-group-tc"><div class="col-tc-4" style="border: 1px solid #bbb; padding: 8px 10px;"><label>Event Logo</label><input style="width:100%" type="text" name="event_logo" class="form-control-tc" id="event_logo" value="'.$event_logo.'"> <input type="button" id="upload" value="Browse..." class="sub_btn upload_image_button" data="event_logo_id" rel="event_logo">'.$event_logo_img.' </div><div class="col-tc-4" style="border: 1px solid #bbb; padding: 8px 10px;"><label>Sponsors Logo</label><input type="text" style="width:100%" name="sponsors_logo" class="form-control-tc" id="sponsors_logo" value="'.$sponsors_logo.'"> <input type="button" id="upload1" value="Browse..." class="sub_btn upload_image_button" data="sponsors_logo_id" rel="sponsors_logo">'.$sponsors_logo_img.' </div><div class="col-tc-4" style="border: 1px solid #bbb; padding: 8px 10px; float: right;"><label>Featured Image</label><input type="text" name="featured_image_event" class="form-control-tc" id="featured_image_event" value="'.$featured_image.'" style="width:100%" /><input type="hidden" name="featured_image_event_id" class="form-control-tc" id="featured_image_event_id" value="'.$featured_image.'" style="width:100%" /> <input type="button" id="upload2" value="Browse..." class="sub_btn upload_image_button" data="featured_image_event_id" rel="featured_image_event">'.$featured_event_image.' </div></div>';
+	
+	
+	$data .= '<div class="form-group-tc content_editor"><p id="content_editor">Event Description</p>'.wp_editor( $content, $editor_id, $settings = array()).'</div><div class="form-group-tc"><p id="term_editor">Term of Use</p>'.wp_editor( $term_content, $term_editor_id, $settings = array()).'</div><div class="form-group-tc"><div class="col-tc-4"><input type="checkbox" '.$check_show_tickets.' name="show_ticket" class="form-checkbox-tc" id="show_ticket" value="1" >Show Tickets Automatically</div><div class="col-tc-4"><input type="checkbox" name="hide_event" class="form-checkbox-tc" id="hide_event" '.$check_hide_event.' value="1">Hide event after expiration</div><div class="col-tc-4"><input type="checkbox" name="event_draft" class="form-checkbox-tc" id="event_draft" '.$check_event_draft.' value="yes">Event Draft Mode</div></div><div class="form-group-tc"><h4>Event Categories</h4></div>';
 	
 	$data .= '<div class="form-group-tc">';
 	$categories = get_categories(array('taxonomy' => 'event_category', 'hide_empty'=> 0));  
@@ -314,7 +306,7 @@ $query = new WP_Query($args);
 	$data .= '</tbody></table></div>';
 
 }
-echo '<style>#wpadminbar { display:none;} .tc-shortcode-builder-button{ display:none !important;}</style>';	
+echo '<style>.tc-shortcode-builder-button{ display:none !important;}</style>';	
 }else{
 
 	$data = '<h1>No Access This Page</h1>';
@@ -366,79 +358,18 @@ $query = new WP_Query($args);
 	
 	return $postData;
 }
-add_shortcode( 'event_list', event_list_func);
-
-function image_uploading($files, $key, $post_id, $event_image_type = ''){
-	
-require_once( ABSPATH . 'wp-admin/includes/image.php' );
-require_once( ABSPATH . 'wp-admin/includes/file.php' );
-require_once( ABSPATH . 'wp-admin/includes/media.php' );
-
-	if ($files['name']) {
-
-		$file = array(
-			'name'     => $files['name'],
-			'type'     => $files['type'],
-			'tmp_name' => $files['tmp_name'],
-			'error'    => $files['error'],
-			'size'     => $files['size']
-		);
-
-		$upload_overrides = array( 'test_form' => false );
-		$upload = wp_handle_upload($file, $upload_overrides);
-
-
-		// $filename should be the path to a file in the upload directory.
-		$filename = $upload['file'];
-
-
-		// Check the type of tile. We'll use this as the 'post_mime_type'.
-		$filetype = wp_check_filetype( basename( $filename ), null );
-
-		// Get the path to the upload directory.
-		$wp_upload_dir = wp_upload_dir();
-		
-		// Prepare an array of post data for the attachment.
-		$attachment = array(
-			'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ), 
-			'post_mime_type' => $filetype['type'],
-			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-			'post_content'   => '',
-			'post_status'    => 'inherit'
-		);
-
-		// Insert the attachment.
-		$attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
-
-		// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-
-		// Generate the metadata for the attachment, and update the database record.
-		$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-		wp_update_attachment_metadata( $attach_id, $attach_data );
-		
-		if($event_image_type == 'featured_image_event'){
-			update_post_meta($post_id, $key, $attach_id);
-		}else{
-			$image_path = $wp_upload_dir['url'] . '/' . basename( $filename );
-			update_post_meta($post_id,$key,$image_path);
-		}
-		
-
-
-	   // array_push($galleryImages, $attach_id);
-
-	}
-}
+add_shortcode( 'event_list', 'event_list_func');
 
 add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
 function callback_for_setting_up_scripts() {
-    
-    wp_enqueue_style( 'tcc-style', plugin_dir_url( __FILE__ ).'css/style-tc.css' );
-    wp_enqueue_style( 'tcc-style2', 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
-    wp_enqueue_script( 'tcc-script', plugin_dir_url( __FILE__ ).'js/script-tc.js', array('jquery', 'another_script'), '1.0.0', true );
-    wp_enqueue_script( 'tcc-script1', plugin_dir_url( __FILE__ ).'js/jquery.timepicker.js', array('jquery', 'another_script'), '1.0.0', true );
-    wp_enqueue_script( 'tcc-script2', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array('jquery', 'another_script'), '1.0.0', true );
+    $ctime = time();
+	
+    wp_enqueue_style( 'tcc-customstyle', plugin_dir_url( __FILE__ ).'css/style-tc.css' );
+    wp_enqueue_style( 'tcc-customstyle2', 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
+	
+    wp_enqueue_script( 'tcc-script', plugin_dir_url( __FILE__ ).'js/script-tc.js', array(), $ctime, true);
+    wp_enqueue_script( 'tcc-script1', plugin_dir_url( __FILE__ ).'js/jquery.timepicker.js', array(), $ctime, true );
+    wp_enqueue_script( 'tcc-script2', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array(), $ctime, true );
 }
 
 function my_error_notice() {

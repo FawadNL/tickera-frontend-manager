@@ -13,6 +13,9 @@
     width: 33%;
     float: left;
 }
+.form-group-tc input[type=text] {
+    width: 100%;
+}
 #content_editor{
     margin-bottom: 5px;
 }
