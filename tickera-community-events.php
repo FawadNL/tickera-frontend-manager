@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Tickera - Frontend Manager addon
+Plugin Name: Tickera - Community Events
 Plugin URI: http://tickera.com/
-Description: With this addon, the userrole "Editor" can now publish and edit events from the frontend. Now its possible to have your community create events for and by themselves. You can enable this feature by placing the shortcode [event_dashboard] into any page you like.
+Description: With this addon, the userrole "Editor" can now publish and edit events from the frontend. Now its possible to have your community create events by and for themselves. You can enable this feature by placing the shortcode [event_dashboard] into any page you like.
 Please note that you also need a WooCommerce Frontend Product manager as well if you do tickets via woocommerce.
 Author: Fawad Tiemoerie
 Author URI: https://appency.nl
