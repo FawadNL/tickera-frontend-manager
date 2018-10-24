@@ -5,7 +5,7 @@ Plugin URI: http://tickera.com/
 Description: With this addon, the userrole "Editor" can now publish and edit events from the frontend. Now its possible to have your community create events by and for themselves. You can enable this feature by placing the shortcode [event_dashboard] into any page you like.
 Please note that you also need a WooCommerce Frontend Product manager as well if you do tickets via woocommerce.
 Author: Fawad Tiemoerie
-Author URI: https://appency.nl
+Author URI: https://roadmapstudios.com
 Version: 1.0.0
  */
 
@@ -376,7 +376,7 @@ function my_error_notice() {
 $ticktra_tc = get_option('tc_version', true);
 if($ticktra_tc == ''){
 ?>
-<div class="error notice"><p><?php _e( "Tickera is required for Tickera Frontend Manager add-on", "https://appency.com" ); ?></p></div>
+<div class="error notice"><p><?php _e( "Tickera is required for Tickera Frontend Manager add-on", "https://tickera.com" ); ?></p></div>
 <?php
 }
 }
